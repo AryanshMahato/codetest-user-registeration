@@ -2,6 +2,7 @@ import { Body, Controller, HttpException, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './Dto/createUser.dto';
 import { LoginUserDto } from './Dto/LoginUserDto';
+import { Token } from './interface/user.interface';
 
 @Controller()
 export class UserController {
@@ -24,10 +25,17 @@ export class UserController {
   @Post('user/login')
   async loginUser(
     @Body() loginUser: LoginUserDto,
-  ): Promise<{ message: string }> {
+  ): Promise<{ message: string; token: any }> {
     const isAuthenticated = await this.userService.loginUser(loginUser);
 
-    if (isAuthenticated) return { message: 'Authentication Successful!' };
+    if (isAuthenticated) {
+      const token = await this.userService.generateToken({
+        username: loginUser.email,
+        password: loginUser.password,
+      });
+
+      return { message: 'Authentication Successful!', token };
+    }
 
     throw new HttpException({ message: 'User or email is wrong' }, 403);
   }

@@ -4,6 +4,7 @@ import { CreateUserDto } from './Dto/createUser.dto';
 import { UserModel } from './user.model';
 import * as bcrypt from 'bcrypt';
 import { LoginUserDto } from './Dto/LoginUserDto';
+import fetch from 'node-fetch';
 
 @Injectable()
 export class UserService {
@@ -60,5 +61,17 @@ export class UserService {
       hashedPassword: user.password,
       plainPassword: userData.password,
     });
+  }
+
+  async generateToken(userData: { username: string; password: string }) {
+    // const { data } = await tokenAPI.post('/location', { id: 15 });
+    // console.log(data);
+
+    const response = await fetch('http://localhost:3000/token', {
+      method: 'POST',
+      body: JSON.stringify(userData),
+    });
+
+    return await response.json();
   }
 }
