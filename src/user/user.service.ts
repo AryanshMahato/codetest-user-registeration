@@ -45,7 +45,7 @@ export class UserService {
       salt,
     });
 
-    const user = userModel.save();
+    const user = await userModel.save();
 
     return user;
   }

@@ -3,6 +3,14 @@ export interface User {
   email: string;
   password: string;
   salt: string;
+  cartId: string;
+}
+
+export interface InputUser {
+  name: string;
+  email: string;
+  password: string;
+  salt: string;
 }
 
 export interface Token {
